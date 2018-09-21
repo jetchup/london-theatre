@@ -1,0 +1,153 @@
+
+
+@import url('https://fonts.googleapis.com/css?family=Teko');
+
+body {
+  background-color: #000;
+  color: #cecece;
+}
+
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 80px;
+  background-image: linear-gradient(#E82C0C, #FF0000);
+}
+
+.App-header div {
+  background-color: #000;
+  opacity: 0.8;
+  height: 100%;
+  width: 75%;
+}
+.App-header {
+  display: flex;
+  justify-content: center;
+  background-color: #222;
+  color: white;
+  font-weight: 500;
+  height: 350px;
+  background-image: url("./img/gjon-mili-stroboscopic-09.jpg");
+}
+
+.App-header .intro{
+  line-height: 100px;
+  background-image: linear-gradient(#E82C0C, #FF0000);
+}
+
+.App-title {
+  font-size: 3em;
+  letter-spacing: -1px;
+  font-family:'Teko', sans-serif;
+  font-weight: 900;
+}
+.App-title  .london {
+  color: #FF0000;
+}
+
+.App-title span {
+  color: #E82C0C;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+.App-header #find-address{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+}
+
+.enter-address {
+  text-align: center;
+  font-weight: 600;
+}
+
+.map {
+  height: 350px;
+  width: 1vw;
+  background-color: black;
+}
+.theatre-info {
+    width: 100%;
+    overflow: hidden;
+    background-image: linear-gradient(#E82C0C, #FF0000);
+}
+
+.theatre-info hr{
+  z-index: 3;
+  margin:0;
+    /* https://css-tricks.com/examples/hrs/ */
+    height: 12px;
+    border: 0;
+    box-shadow: inset 0 12px 12px -12px rgba(0, 0, 0, 0.5);
+}
+.theatre-info .address{
+  margin:0;
+  margin-top: -9px;
+  font-size: 0.8em;
+  color: black;
+  background-color: #e80000;
+}
+
+.theatre-info .name{
+  font-family: 'Teko', sans-serif;
+  font-size: 2em;
+  margin:0;
+  color: black;
+}
+
+.theatre-info .info{
+  margin:0;
+  font-size: 0.9em;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  background-color: #000;
+  width: 100%;
+  height: 150px;
+  overflow: hidden;
+}
+.theatre-info .info p, .theatre-info .info div{
+  margin:0;
+  margin-left: 20px;
+  width: 80%;
+  text-align: left;
+}
+
+.image-container:first-of-type {
+  margin:0;
+}
+.image-container {
+  margin:0;
+  margin-top: 20px;
+  height: 100px;
+  overflow: hidden;
+}
+
+
+.theatre-picture {
+  margin:0;
+  width: 100%;
+}
+
+/* --------------------------  This is where I change the icons for the theatre ------------------------------ */
+.svg-inline--fa {
+  height: inherit;
+  color: #c3c3c3;
+}
+
+.svg-inline--fa.fa-w-20 {
+  width: 30px;
+  padding-bottom: 10px;
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
