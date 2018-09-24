@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { Fragment } from 'react'
-import {withScriptjs, withGoogleMap, GoogleMap, Marker} from "react-google-maps";
+import {withScriptjs, withGoogleMap, GoogleMap, Marker, InfoWindow} from "react-google-maps";
 import { MarkerClusterer } from "react-google-maps/lib/components/addons/MarkerClusterer"
 
 
 let result = [];
+let infoWindowOpen = false;
 
 class Map extends Component {
 
@@ -12,8 +13,6 @@ class Map extends Component {
     venueInfo: 'https://api.londontheatredirect.com/rest/v2/Venues/',
     venues: [],
     markerPosition: [],
-    mapCenter: {lat: 51.5074, lng: 0.1278},
-    mapZoom: 8,
   }
 
   componentDidMount() {
@@ -21,12 +20,12 @@ class Map extends Component {
     //var request = new XMLHttpRequest();
 
     fetch('https://api-sandbox.londontheatredirect.com/rest/v2/Venues', {
-        method: "GET", // *GET, POST, PUT, DELETE, etc.
-        mode: "cors", // no-cors, cors, *same-origin
-        headers: {
-          'Api-Key': 'jytxx2cbjne3w8sqsgbe9be6',
-          'Content-Type': 'application/json'
-        }})
+      method: "GET", // *GET, POST, PUT, DELETE, etc.
+      mode: "cors", // no-cors, cors, *same-origin
+      headers: {
+        'Api-Key': 'jytxx2cbjne3w8sqsgbe9be6',
+        'Content-Type': 'application/json'
+      }})
     .then(response => {
       if (response.status === 200) {
         return response.json();
@@ -38,7 +37,7 @@ class Map extends Component {
     .catch(error => console.log(error, ' error happened on the second instance of the request'))
 
 
-      this.waitForGoogle()
+    this.waitForGoogle()
   }
   // -------------
   //  iterate through the venues
@@ -108,84 +107,98 @@ class Map extends Component {
 
       this.geocodeAddress(geocoder, map)
 
-
     )
   }
 
 
-    // implement markers from venue addresses
-    geocodeAddress = (geocoder, map, findAddress) => {
+  // implement markers from venue addresses
+  geocodeAddress = (geocoder, map) => {
+    this.state.venues.length === 0? (console.log('no venues found, waiting...'), setTimeout(this.geocodeAddress, 1000)):
+    this.state.venues.slice(10, 20).map((venue) =>  // I HAD TO DO THIS TO AVOID GOOGLE API ERROR FOR TOO MANY REQUESTS
 
-      if (geocoder !== null ) {
-      this.state.venues.length === 0? (console.log('no venues found, waiting...'), setTimeout(this.geocodeAddress, 1000)):
-      this.state.venues.slice(10, 20).map((venue) =>  // I HAD TO DO THIS TO AVOID GOOGLE API ERROR FOR TOO MANY REQUESTS
-
-
-        {
-        const address = venue[0]
-        const name = venue[1]
-        const that = this
-
-        getAddress(address, that)
-      })
-    } else {
+    {
+      const address = venue[0]
+      const name = venue[1]
       const that = this
 
-      getAddress(findAddress, that)
-    }
+      this.getAddress(geocoder, address, that)
+    })
+  }
 
-      function getAddress(address, that) {
-        if (address) {
-          // ------------------
-          //here is the handy code for geocode markers from google developers
-          // ------------------
-          geocoder = new window.google.maps.Geocoder();
+  getAddress(geocoder, address, that) {
+    if (address) {
+      // ------------------
+      //here is the handy code for geocode markers from google developers
+      // ------------------
+      geocoder = new window.google.maps.Geocoder();
 
-          geocoder.geocode( { 'address': address, 'region': 'uk'}, function(results, status) {
-            if (status === 'OK') {
-              result.push([[results[0].geometry.location.lat(), results[0].geometry.location.lng()]])
-            } else {
-              alert('Geocode was not successful for the following reason: ' + status);
-            }
-            that.setState({ markerPosition: result})
-          });
+      geocoder.geocode( { 'address': address, 'region': 'uk'}, function(results, status) {
+        if (status === 'OK') {
+          result.push([[results[0].geometry.location.lat(), results[0].geometry.location.lng()]])
+        } else {
+          alert('Geocode was not successful for the following reason: ' + status);
         }
-      }
+        that.setState({ markerPosition: result})
+      });
     }
+  }
 
   drop() {
     return this.state.markerPosition.map((marker, index) =>
-       <Marker key={index} position={{ lat: marker[0][0], lng: marker[0][1] }}/>
+      <Fragment>
+       <Marker
+        onClick={() => {this.handleMarker(marker)}}
+        key={index}
+        position={{ lat: marker[0][0], lng: marker[0][1] }}
+        />
+        <InfoWindow
+          marker={marker}
+          visible={this.state.infoWindow}>
+            <div>
+              <h1>Placeholder text InfoWindow</h1>
+            </div>
+        </InfoWindow>
+      </Fragment>
     )
   }
 
+  handleMarker(marker) {
+    console.log(marker)
+
+    const infoWindow = new window.google.maps.InfoWindow({
+      content: 'hi there'
+    })
+
+    // let's show the infoWindow
+    infoWindowOpen= true
+
+  }
 
   render() {
-
     // variables from react-google-maps
     const MapWithAMarkerClusterer = withScriptjs(withGoogleMap(props =>
-        <GoogleMap
-          defaultZoom={this.state.mapZoom}
-          defaultCenter={this.state.mapCenter}
+      <GoogleMap
+        defaultZoom={this.props.mapZoom}
+        defaultCenter={this.props.mapCenter}
+      >
+        <MarkerClusterer
+          averageCenter
+          enableRetinaIcons
+          gridSize={60}
         >
-          <MarkerClusterer
-            averageCenter
-            enableRetinaIcons
-            gridSize={60}
-          >
-            {this.drop()}
-          </MarkerClusterer>
-        </GoogleMap>
-    ));
+          {this.drop()}
+        </MarkerClusterer>
+      </GoogleMap>
+  ));
 
-    return (
-      <MapWithAMarkerClusterer
-        googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyBXHssNaFm57yh0sOVvfmjp8VkfiPTW7yY&v=3.exp&libraries=geometry,drawing,places"
-        loadingElement={<div style={{ height: 'calc(100vh / 2)' }} />}
-        containerElement={<div style={{ height: '100%' }} />}
-        mapElement={<div style={{ height: `100%` }} />}
-      />
-    )
+  return (
+    <MapWithAMarkerClusterer
+      googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyBXHssNaFm57yh0sOVvfmjp8VkfiPTW7yY&v=3.exp&libraries=geometry,drawing,places"
+      loadingElement={<div style={{ height: 'calc(100vh / 2)' }} />}
+      containerElement={<div style={{ height: '100%' }} />}
+      mapElement={<div style={{ height: `100%` }} />}
+    />
+  )
 
   }
 }

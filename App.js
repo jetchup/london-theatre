@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import { Fragment } from 'react'
 import headerImage from './img/gjon-mili-stroboscopic-09.jpg';
 import theatre from './img/london-coliseum-view-from-t.jpg'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTheaterMasks } from '@fortawesome/free-solid-svg-icons'
 import Test from './TESTgooglemap.js'
 import FindAddress from './FindAddress.js'
 import './App.css';
@@ -16,6 +14,8 @@ class App extends Component {
   state = {
     venueArray: [],
     addressFieldValue : [],
+    mapCenter: {lat: 51.5074, lng: 0.1278},
+    mapZoom: 8,
   }
 
   getVenueInfo(venues) {
@@ -47,7 +47,7 @@ class App extends Component {
       }
 
       return (
-        <Fragment >
+        <div className='theatre-container' >
           <div className='image-container'>
             <img id='{theatre}' className='theatre-picture' src={theatre} />
           </div>
@@ -56,10 +56,10 @@ class App extends Component {
             <hr />
             <p className="address">{address}</p>
           </div>
-          <div  className='theatre-info'>
+          <div  className='theatre-description'>
             <p dangerouslySetInnerHTML={{__html: info}} className="info"></p>
           </div>
-        </Fragment>
+        </div>
       )
     })
     return listTheaters
@@ -75,8 +75,8 @@ class App extends Component {
       addressField[0].value = 'first enter an address'
     } else {
     console.log(addressField[0].value)
-    
-    //this.props.geocodeAddress(null, null, addressField[0].value)
+
+    this.newAddress(addressField[0].value)
     }
   }
 
@@ -84,10 +84,35 @@ class App extends Component {
     addressField[0].value = ''
   }
 
+// -----------------------
+// Taking the input field address and turning it to coordinates
+// -----------------------
+
+  newAddress = (address) => {
+    const map= window.google.maps.Map
+    let result= []
+    const that = this
+
+    if (address) {
+      let geocoder = new window.google.maps.Geocoder();
+
+      geocoder.geocode( { 'address': address, 'region': 'uk'}, function(results, status) {
+        if (status === 'OK') {
+          result.push([[results[0].geometry.location.lat(), results[0].geometry.location.lng()]])
+        } else {
+          alert('Geocode was not successful for the following reason: ' + status);
+        }
+        console.log(result[0][0])
+        that.setState({
+          mapCenter: {lat: result[0][0][0], lng: result[0][0][1]},
+          mapZoom: 14
+        })
+      });
+    }
+  }
+
 
   render() {
-    console.log(venueArrays)
-    console.log(this.displayVenues())
 
     return (
       <div className="App">
@@ -103,10 +128,12 @@ class App extends Component {
           </div>
         </header>
         <main>
-         <div id='map' style={{height: 'calc(100vh / 2)', width:'100%'}}>
-         <Test getVenueInfo={this.getVenueInfo.bind(this)} />
+         <div id='map' style={{height: 'calc(100vh / 2)', width:'75%'}}>
+         <Test mapCenter={this.state.mapCenter} mapZoom={this.state.mapZoom} getVenueInfo={this.getVenueInfo.bind(this)} newDecodedAddress={this.state.newDecodedAddress}/>
          </div>
           <div className='theatres'>
+            <h2>Theatre Overview</h2>
+            <hr />
             {this.displayVenues()}
       </div>
         <p className="App-intro">
