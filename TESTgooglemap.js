@@ -5,7 +5,7 @@ import { MarkerClusterer } from "react-google-maps/lib/components/addons/MarkerC
 
 
 let result = [];
-let infoWindowOpen = false;
+let infoWindowOpen = true;
 
 class Map extends Component {
 
@@ -13,6 +13,7 @@ class Map extends Component {
     venueInfo: 'https://api.londontheatredirect.com/rest/v2/Venues/',
     venues: [],
     markerPosition: [],
+    map: []
   }
 
   componentDidMount() {
@@ -105,14 +106,16 @@ class Map extends Component {
       geocoder = new window.google.maps.Geocoder(),
       map = window.google.maps.Map,
 
-      this.geocodeAddress(geocoder, map)
+      this.setState({map: map}),
+
+      this.geocodeAddress(geocoder)
 
     )
   }
 
 
   // implement markers from venue addresses
-  geocodeAddress = (geocoder, map) => {
+  geocodeAddress = (geocoder) => {
     this.state.venues.length === 0? (console.log('no venues found, waiting...'), setTimeout(this.geocodeAddress, 1000)):
     this.state.venues.slice(10, 20).map((venue) =>  // I HAD TO DO THIS TO AVOID GOOGLE API ERROR FOR TOO MANY REQUESTS
 
@@ -144,30 +147,27 @@ class Map extends Component {
   }
 
   drop() {
-    return this.state.markerPosition.map((marker, index) =>
-      <Fragment>
-       <Marker
-        onClick={() => {this.handleMarker(marker)}}
-        key={index}
-        position={{ lat: marker[0][0], lng: marker[0][1] }}
-        />
-        <InfoWindow
-          marker={marker}
-          visible={this.state.infoWindow}>
-            <div>
-              <h1>Placeholder text InfoWindow</h1>
-            </div>
-        </InfoWindow>
-      </Fragment>
-    )
+    if (window.google){
+      return this.state.markerPosition.map((marker, index) =>
+        <Fragment>
+         <Marker
+          onClick={() => {this.handleMarker(marker)}}
+          key={index}
+          position={{ lat: marker[0][0], lng: marker[0][1] }}
+          />
+
+        </Fragment>
+      )
+    }
   }
 
   handleMarker(marker) {
+    console.log(this.state.map)
     console.log(marker)
-
-    const infoWindow = new window.google.maps.InfoWindow({
-      content: 'hi there'
-    })
+     const infowindow = new window.google.maps.InfoWindow({
+          content: '<h1>Placeholder text InfoWindow</h1>'
+        });
+    infowindow.open(this.state.map, marker);
 
     // let's show the infoWindow
     infoWindowOpen= true
@@ -197,6 +197,7 @@ class Map extends Component {
       loadingElement={<div style={{ height: 'calc(100vh / 2)' }} />}
       containerElement={<div style={{ height: '100%' }} />}
       mapElement={<div style={{ height: `100%` }} />}
+      visible = {true}
     />
   )
 
