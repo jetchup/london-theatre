@@ -36,7 +36,7 @@ class App extends Component {
   }
 
   displayVenues(){
-    const listTheaters = this.state.venueArray.map(venue =>{
+    const listTheaters = this.state.venueArray.map((venue, index) =>{
       const address = venue[0]
       const name = venue[1]
       const info = venue[2]
@@ -47,7 +47,7 @@ class App extends Component {
       }
 
       return (
-        <div className='theatre-container' >
+        <div key={'venue'+index} className='theatre-container' >
           <div className='image-container'>
             <img id='{theatre}' className='theatre-picture' src={theatre} />
           </div>

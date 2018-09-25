@@ -149,7 +149,7 @@ class Map extends Component {
   drop() {
     if (window.google){
       return this.state.markerPosition.map((marker, index) =>
-        <Fragment>
+        <Fragment key={'Fragment' + index}>
          <Marker
           onClick={() => {this.handleMarker(marker)}}
           key={index}
@@ -167,7 +167,18 @@ class Map extends Component {
      const infowindow = new window.google.maps.InfoWindow({
           content: '<h1>Placeholder text InfoWindow</h1>'
         });
+
+
+          // --------------------
+          // https://stackoverflow.com/questions/12410062/check-if-infowindow-is-opened-google-maps-v3
+          window.google.maps.InfoWindow.prototype.isOpen = function(map){
+
+            console.log(map !== null && typeof map !== "undefined")
+            return (map !== null && typeof map !== "undefined");
+          }
+          //--------------------------
     infowindow.open(this.state.map, marker);
+    infowindow.isOpen(this.state.map)
 
     // let's show the infoWindow
     infoWindowOpen= true
