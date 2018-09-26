@@ -95,12 +95,48 @@ main {
   border-radius: 2%;
 }
 
+/*********************** Infobox Googlemaps ******************/
+
+.theatre-container-infobox {
+  margin:0;
+  border-radius: 10px;
+  width: 200px;
+  flex: 1 1 auto;
+}
+.image-container-infobox {
+  margin:0;
+  margin-top: 20px;
+  height: 100px;
+  width: 200px;
+  overflow: hidden;
+}
+.theatre-picture-infobox {
+  margin:0;
+  width: 200px;
+  border-radius: 3% 3% 0;
+}
+.theatre-info-infobox {
+    width: 200px;
+    overflow: hidden;
+    background-image: linear-gradient(#E82C0C, #FF0000);
+}
+.name-infobox {
+    font-family: 'Teko', sans-serif;
+    font-size: 2em;
+    margin:0;
+    margin-top: 10px;
+    color: black;
+}
+.address-infobox {
+  font-weight: 600;
+}
+
 .theatres {
   width: 75%;
   margin-top: 20px;
 }
 
-.theatres hr {
+.theatres hr, .theatre-info-infobox hr {
   /* https://css-tricks.com/examples/hrs/ */
   border: 0;
   height: 1px;
@@ -118,6 +154,7 @@ main {
   border-radius: 10px;
   width: 100%;
   flex: 1 1 auto;
+  display: none;
 }
 
 .theatre-info {

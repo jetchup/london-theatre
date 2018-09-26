@@ -47,7 +47,7 @@ class App extends Component {
       }
 
       return (
-        <div key={'venue'+index} className='theatre-container' >
+        <div id={name} key={'venue'+index} className='theatre-container' >
           <div className='image-container'>
             <img id='{theatre}' className='theatre-picture' src={theatre} />
           </div>
@@ -132,8 +132,6 @@ class App extends Component {
          <Test mapCenter={this.state.mapCenter} mapZoom={this.state.mapZoom} getVenueInfo={this.getVenueInfo.bind(this)} newDecodedAddress={this.state.newDecodedAddress}/>
          </div>
           <div className='theatres'>
-            <h2>Theatre Overview</h2>
-            <hr />
             {this.displayVenues()}
       </div>
         <p className="App-intro">

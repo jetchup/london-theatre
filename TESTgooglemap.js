@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
-import { Fragment } from 'react'
+import theatre from './img/london-coliseum-view-from-t.jpg'
+import { Fragment } from 'react';
 import {withScriptjs, withGoogleMap, GoogleMap, Marker, InfoWindow} from "react-google-maps";
-import { MarkerClusterer } from "react-google-maps/lib/components/addons/MarkerClusterer"
+import { MarkerClusterer } from "react-google-maps/lib/components/addons/MarkerClusterer";
+const { compose, withProps, withStateHandlers } = require("recompose");
+
 
 
 let result = [];
-let infoWindowOpen = true;
+
+let showInfoIndex= ''
 
 class Map extends Component {
 
@@ -13,7 +17,7 @@ class Map extends Component {
     venueInfo: 'https://api.londontheatredirect.com/rest/v2/Venues/',
     venues: [],
     markerPosition: [],
-    map: []
+    map: [],
   }
 
   componentDidMount() {
@@ -124,11 +128,11 @@ class Map extends Component {
       const name = venue[1]
       const that = this
 
-      this.getAddress(geocoder, address, that)
+      this.getAddress(geocoder, address, name, that)
     })
   }
 
-  getAddress(geocoder, address, that) {
+  getAddress(geocoder, address, name, that) {
     if (address) {
       // ------------------
       //here is the handy code for geocode markers from google developers
@@ -137,7 +141,7 @@ class Map extends Component {
 
       geocoder.geocode( { 'address': address, 'region': 'uk'}, function(results, status) {
         if (status === 'OK') {
-          result.push([[results[0].geometry.location.lat(), results[0].geometry.location.lng()]])
+          result.push([[results[0].geometry.location.lat(), results[0].geometry.location.lng(), address, name]])
         } else {
           alert('Geocode was not successful for the following reason: ' + status);
         }
@@ -146,48 +150,58 @@ class Map extends Component {
     }
   }
 
-  drop() {
+  drop(props) {
     if (window.google){
-      return this.state.markerPosition.map((marker, index) =>
-        <Fragment key={'Fragment' + index}>
-         <Marker
-          onClick={() => {this.handleMarker(marker)}}
-          key={index}
-          position={{ lat: marker[0][0], lng: marker[0][1] }}
-          />
+      const that = this
+      // console.log(this.state.markerPosition)
+      // console.log(this.state.venues)
 
-        </Fragment>
+      // ----this helped a lot: https://github.com/tomchentw/react-google-maps/issues/753
+      return this.state.markerPosition.map((marker, index) =>{
+        let name = marker[0][3]
+        return (
+        <Marker
+            key={'Marker' + index}
+            onClick={()=>{ props.onToggleOpen(index)} }
+            position={{ lat: marker[0][0], lng: marker[0][1] }}
+        >
+          { (props.showInfoIndex == index )&& <InfoWindow onCloseClick={props.onToggleOpen}>
+         <div onClick={props.onToggleDisplay(name) } className='theatre-container-infobox' >
+            <div className='image-container-infobox'>
+              <img id='{theatre}' className='theatre-picture-infobox' src={theatre} />
+            </div>
+            <div className='theatre-info-infobox'>
+              <p className="name-infobox">{marker[0][3]}</p>
+              <hr />
+              <p className="address-infobox">{marker[0][2]}</p>
+            </div>
+          </div>
+        </InfoWindow>}
+      </Marker>)
+      }
       )
     }
   }
 
-  handleMarker(marker) {
-    console.log(this.state.map)
-    console.log(marker)
-     const infowindow = new window.google.maps.InfoWindow({
-          content: '<h1>Placeholder text InfoWindow</h1>'
-        });
-
-
-          // --------------------
-          // https://stackoverflow.com/questions/12410062/check-if-infowindow-is-opened-google-maps-v3
-          window.google.maps.InfoWindow.prototype.isOpen = function(map){
-
-            console.log(map !== null && typeof map !== "undefined")
-            return (map !== null && typeof map !== "undefined");
-          }
-          //--------------------------
-    infowindow.open(this.state.map, marker);
-    infowindow.isOpen(this.state.map)
-
-    // let's show the infoWindow
-    infoWindowOpen= true
-
-  }
 
   render() {
     // variables from react-google-maps
-    const MapWithAMarkerClusterer = withScriptjs(withGoogleMap(props =>
+    const MapWithAMarkerClusterer = compose(
+    withStateHandlers(() => ({
+      isOpen: false,
+    }), {
+      onToggleOpen: ({ isOpen }) => (index) => ({
+        isOpen: !isOpen,
+        showInfoIndex: index
+      }),
+      onToggleDisplay: ({ isOpen }) => (name) => ({
+        divName: name,
+        status: isOpen? document.getElementById(name).style.display="block" : document.getElementById(name).style.display="none"
+      }),
+    }),
+    withScriptjs,
+    withGoogleMap
+  )(props =>
       <GoogleMap
         defaultZoom={this.props.mapZoom}
         defaultCenter={this.props.mapCenter}
@@ -197,10 +211,11 @@ class Map extends Component {
           enableRetinaIcons
           gridSize={60}
         >
-          {this.drop()}
+        {this.drop(props)}
+
         </MarkerClusterer>
       </GoogleMap>
-  ));
+  );
 
   return (
     <MapWithAMarkerClusterer
@@ -208,7 +223,6 @@ class Map extends Component {
       loadingElement={<div style={{ height: 'calc(100vh / 2)' }} />}
       containerElement={<div style={{ height: '100%' }} />}
       mapElement={<div style={{ height: `100%` }} />}
-      visible = {true}
     />
   )
 
