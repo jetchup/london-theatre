@@ -3,8 +3,11 @@
 @import url('https://fonts.googleapis.com/css?family=Teko');
 
 button {
-  background-color: #fff;
+  border: none;
+  background: none;
+  background-color: #ffd8d8;
   width: 60%;
+  border-radius: 5px;
 }
 
 body {
@@ -37,12 +40,13 @@ body {
   justify-content: center;
   color: white;
   font-weight: 500;
-  height: 350px;
 }
 
 .App-header .intro{
-  line-height: 100px;
   background-image: linear-gradient(#E82C0C, #FF0000);
+  width: 100%;
+  padding: 20px 0;
+  margin-bottom: 20px;
 }
 
 .App-title {
@@ -73,9 +77,10 @@ body {
 }
 
 .enter-address {
-  width: 60%;
+  width: 59%;
   text-align: center;
   font-weight: 600;
+  margin-bottom: 10px;
 }
 
 main {

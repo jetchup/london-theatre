@@ -166,7 +166,11 @@ class Map extends Component {
             position={{ lat: marker[0][0], lng: marker[0][1] }}
         >
           { (props.showInfoIndex == index )&& <InfoWindow onCloseClick={()=>{ props.onToggleOpen(index, name)} }>
-         <div onChange={()=>{ props.onToggleOpen(index, name)} } className='theatre-container-infobox' >
+         <div
+            onLoad={()=>{ props.onToggleOpen(index, name)} }
+            onClick={()=>{ document.getElementById(name).scrollIntoView() } }
+            className='theatre-container-infobox'
+          >
             <div className='image-container-infobox'>
               <img id='{theatre}' className='theatre-picture-infobox' src={theatre} />
             </div>

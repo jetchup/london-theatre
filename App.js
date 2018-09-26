@@ -119,12 +119,11 @@ class App extends Component {
         <header className="App-header">
           <div>
             <h1 className="App-title"><span className='london'>London</span><span className='theatre'>Theatre</span></h1>
-            <p className='intro'>Find theatres next to you</p>
-              <div id='find-address'>
-                <p>Enter address</p>
-                <input className='enter-address' onFocus={this.eraseText}/>
-                <button onClick={this.getAddress}>Find theatres</button>
-              </div>
+            <div className='intro'>
+              <p>Find theatres next to you</p>
+              <input className='enter-address' onFocus={this.eraseText}/>
+              <button onClick={this.getAddress}>Find theatres</button>
+            </div>
           </div>
         </header>
         <main>
