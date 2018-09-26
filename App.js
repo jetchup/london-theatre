@@ -128,7 +128,7 @@ class App extends Component {
           </div>
         </header>
         <main>
-         <div id='map' style={{height: 'calc(100vh / 2)', width:'75%'}}>
+         <div id='map' style={{height: 'calc(100vh / 1.5)', width:'95%'}}>
          <Test mapCenter={this.state.mapCenter} mapZoom={this.state.mapZoom} getVenueInfo={this.getVenueInfo.bind(this)} newDecodedAddress={this.state.newDecodedAddress}/>
          </div>
           <div className='theatres'>
