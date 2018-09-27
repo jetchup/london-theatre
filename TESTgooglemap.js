@@ -3,6 +3,7 @@ import theatre from './img/london-coliseum-view-from-t.jpg'
 import { Fragment } from 'react';
 import {withScriptjs, withGoogleMap, GoogleMap, Marker, InfoWindow} from "react-google-maps";
 import { MarkerClusterer } from "react-google-maps/lib/components/addons/MarkerClusterer";
+import CreateMarker from './CreateMarker.js'
 const { compose, withProps, withStateHandlers } = require("recompose");
 
 
@@ -143,47 +144,10 @@ class Map extends Component {
         if (status === 'OK') {
           result.push([[results[0].geometry.location.lat(), results[0].geometry.location.lng(), address, name]])
         } else {
-          alert('Geocode was not successful for the following reason: ' + status);
+          console.log('Geocode was not successful for the following reason: ' + status);
         }
         that.setState({ markerPosition: result})
       });
-    }
-  }
-
-  drop(props) {
-    if (window.google){
-      const that = this
-      // console.log(this.state.markerPosition)
-      // console.log(this.state.venues)
-
-      // ----this helped a lot: https://github.com/tomchentw/react-google-maps/issues/753
-      return this.state.markerPosition.map((marker, index) =>{
-        let name = marker[0][3]
-        return (
-        <Marker
-            key={'Marker' + index}
-            onClick={()=>{ props.onToggleOpen(index, name)} }
-            position={{ lat: marker[0][0], lng: marker[0][1] }}
-        >
-          { (props.showInfoIndex == index )&& <InfoWindow onCloseClick={()=>{ props.onToggleOpen(index, name)} }>
-         <div
-            onLoad={()=>{ props.onToggleOpen(index, name)} }
-            onClick={()=>{ document.getElementById(name).scrollIntoView() } }
-            className='theatre-container-infobox'
-          >
-            <div className='image-container-infobox'>
-              <img id='{theatre}' className='theatre-picture-infobox' src={theatre} />
-            </div>
-            <div className='theatre-info-infobox'>
-              <p className="name-infobox">{marker[0][3]}</p>
-              <hr />
-              <p className="address-infobox">{marker[0][2]}</p>
-            </div>
-          </div>
-        </InfoWindow>}
-      </Marker>)
-      }
-      )
     }
   }
 
@@ -191,16 +155,6 @@ class Map extends Component {
   render() {
     // variables from react-google-maps
     const MapWithAMarkerClusterer = compose(
-    withStateHandlers(() => ({
-      isOpen: false,
-    }), {
-      onToggleOpen: ({ isOpen }) => (index, name) => ({
-        isOpen: !isOpen,
-        showInfoIndex: index,
-
-        status: isOpen? document.getElementById(name).style.display="block" : document.getElementById(name).style="none"
-      }),
-    }),
     withScriptjs,
     withGoogleMap
   )(props =>
@@ -213,7 +167,7 @@ class Map extends Component {
           enableRetinaIcons
           gridSize={60}
         >
-        {this.drop(props)}
+        <CreateMarker state={this.state} />
 
         </MarkerClusterer>
       </GoogleMap>
