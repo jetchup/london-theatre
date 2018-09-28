@@ -79,10 +79,9 @@ class App extends Component {
     ];
 
     var dist = calculateDistance(cities[0][1], cities[0][2], cities[1][1], cities[1][2], 'K');
+    that.setState({mapCenter: {lat: lat, lng: lng}})
     if (dist > 20) {
       document.getElementById("modal").style.display = "block";
-    } else {
-      that.setState({mapCenter: {lat: lat, lng: lng}})
     }
 
     function calculateDistance(lat1, lon1, lat2, lon2, unit) {
@@ -185,9 +184,12 @@ class App extends Component {
             {this.displayVenues()}
           </div>
           <div id='modal'>
-            <p>You are too far away from London.</p>
-            <p>Would you like to use the citys coordinates instead?</p>
-            <button onClick={this.goLondon.bind(this)}>yes, go to London</button>
+          <div id='modal-content'>
+            <div className='attention'>
+              <p>Would you like to go to London?</p>
+              <button onClick={this.goLondon.bind(this)}>yes, go to London</button>
+            </div>
+            </div>
           </div>
         </main>
       </div>

@@ -23,7 +23,7 @@ class CreateMarker extends Component {
 
   onShowTheatreInfo(name) {
     console.log(this.state.isOpen)
-    let showOpen= this.state.isOpen? document.getElementById(name).style.display="block" : document.getElementById(name).style="none"
+    this.state.isOpen? document.getElementById(name).style.display="block" : document.getElementById(name).style="none"
   }
 
     // ----this helped a lot: https://github.com/tomchentw/react-google-maps/issues/753
@@ -41,7 +41,7 @@ class CreateMarker extends Component {
             onClick={()=>{ this.onToggleOpen(index, name), this.onShowTheatreInfo(name), console.log(index)} }
             position={{ lat: marker[0][0], lng: marker[0][1] }}
         >
-          { (this.state.isOpen )&& <InfoWindow onCloseClick={()=>{ this.onToggleOpen(index, name), this.onShowTheatreInfo(name)} }>
+          { (this.state.isOpen && this.state.showInfoIndex === index)&& <InfoWindow onCloseClick={()=>{ this.onToggleOpen(index, name), this.onShowTheatreInfo(name)} }>
          <div className='theatre-container-infobox'
             onClick={()=>{ document.getElementById(name).scrollIntoView() } }
           >
