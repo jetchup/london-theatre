@@ -20,14 +20,6 @@ class App extends Component {
 
   getVenueInfo(venues) {
     this.setState({venueArray: venues})
-    // venues.map(venue => {
-    //   let address = venue[0]
-    //   let name = venue[1]
-    //   let info = venue[2]
-    //   venueArrays.push({address: address, name: name, info: info})
-    // })
-
-
   }
 
   setStateVenues() {
@@ -64,6 +56,59 @@ class App extends Component {
     })
     return listTheaters
   }
+
+  // -----------------------
+  // Address via browser´s geolocation
+  // -----------------------
+  watchID() {
+    const that = this
+    navigator.geolocation.watchPosition(function(position) {
+      that.toLondon(position.coords.latitude, position.coords.longitude)
+      //that.setState({mapCenter: {lat: lat, lng: lng}})
+
+    })
+  }
+
+  // Calculate distance to london, from https://stackoverflow.com/questions/30533351/filter-list-of-cities-with-latitude-and-longitude-on-given-distance-from-another
+  toLondon(lat, lng) {
+    const that = this
+
+    var cities = [
+    ['London', 51.5074, 0.1278],
+    ['Your Location', lat, lng]
+    ];
+
+    var dist = calculateDistance(cities[0][1], cities[0][2], cities[1][1], cities[1][2], 'K');
+    if (dist > 20) {
+      document.getElementById("modal").style.display = "block";
+    } else {
+      that.setState({mapCenter: {lat: lat, lng: lng}})
+    }
+
+    function calculateDistance(lat1, lon1, lat2, lon2, unit) {
+        var radlat1 = Math.PI * lat1 / 180
+        var radlat2 = Math.PI * lat2 / 180
+        var radlon1 = Math.PI * lon1 / 180
+        var radlon2 = Math.PI * lon2 / 180
+        var theta = lon1 - lon2
+        var radtheta = Math.PI * theta / 180
+        var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+        dist = Math.acos(dist)
+        dist = dist * 180 / Math.PI
+        dist = dist * 60 * 1.1515
+        if (unit == "K") {
+            dist = dist * 1.609344
+        }
+        if (unit == "N") {
+            dist = dist * 0.8684
+        }
+        return dist
+    }
+  }
+
+  // -----------------------
+  // This is the address you got from the user´s imput
+  // -----------------------
 
   getAddress = (e) => {
 
@@ -111,8 +156,14 @@ class App extends Component {
     }
   }
 
+  //--------------- Return to London after using coordinates too far away
+  goLondon() {
+    this.setState({mapCenter: {lat: 51.5074, lng: 0.1278}})
+    document.getElementById("modal").style.display = "none";
+  }
 
   render() {
+    this.watchID()
 
     return (
       <div className="App">
@@ -132,10 +183,12 @@ class App extends Component {
          </div>
           <div className='theatres'>
             {this.displayVenues()}
-      </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+          </div>
+          <div id='modal'>
+            <p>You are too far away from London.</p>
+            <p>Would you like to use the citys coordinates instead?</p>
+            <button onClick={this.goLondon.bind(this)}>yes, go to London</button>
+          </div>
         </main>
       </div>
     );

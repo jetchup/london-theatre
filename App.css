@@ -223,20 +223,14 @@ main {
   border-radius: 3% 3% 0;
 }
 
+/* --------------------------  Modal only appears if you are too far away from London TODO style it!!------------------------------ */
+#modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: none;
+  background-color: white;
+}
+
 /* --------------------------  This is where I change the icons for the theatre ------------------------------ */
-.svg-inline--fa {
-  height: inherit;
-  color: #c3c3c3;
-}
-
-.svg-inline--fa.fa-w-20 {
-  width: 30px;
-  padding-bottom: 10px;
-  padding-right: 10px;
-  padding-left: 10px;
-}
-
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
