@@ -9,6 +9,7 @@ button {
   width: 60%;
   border-radius: 5px;
   margin-bottom: 20px;
+  padding: 15px 0;
 }
 
 body {
@@ -31,8 +32,7 @@ body {
 }
 
 .App-header div {
-  background-color: #000;
-  opacity: 0.8;
+  background-color: rgba(0, 0, 0, 0.5);
   height: 100%;
   width: 75%;
 }
@@ -44,7 +44,8 @@ body {
 }
 
 .App-header .intro{
-  background-image: linear-gradient(#E82C0C, #FF0000);
+
+  background-image: linear-gradient(rgba(232, 44, 12, 0.7), rgba(255, 0, 0, 0.7));
   width: 100%;
   padding: 20px 0;
   margin-bottom: 20px;
@@ -229,7 +230,7 @@ main {
   position: absolute;
   display: none;
   background: rgba(0, 0, 0, 0.8);
-  width: 95%;
+  width: 90%;
   height: calc(100vh / 1.5);
 }
 #modal p {
