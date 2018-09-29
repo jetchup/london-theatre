@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Fragment } from 'react';
-import {withScriptjs, withGoogleMap, GoogleMap, Marker, InfoWindow} from "react-google-maps";
+import { Marker, InfoWindow} from "react-google-maps";
 import theatre from './img/london-coliseum-view-from-t.jpg'
 
 class CreateMarker extends Component {
@@ -17,12 +17,9 @@ class CreateMarker extends Component {
       isOpen: !(this.state.isOpen),
       showInfoIndex: index
     })
-
-      console.log(this.state.isOpen, index)
   }
 
   onShowTheatreInfo(name) {
-    console.log(this.state.isOpen)
     this.state.isOpen? document.getElementById(name).style.display="block" : document.getElementById(name).style="none"
   }
 
@@ -38,7 +35,7 @@ class CreateMarker extends Component {
         return (
         <Marker
             key={'Marker' + index}
-            onClick={()=>{ this.onToggleOpen(index, name), this.onShowTheatreInfo(name), console.log(index)} }
+            onClick={()=>{ this.onToggleOpen(index, name), this.onShowTheatreInfo(name)} }
             position={{ lat: marker[0][0], lng: marker[0][1] }}
         >
           { (this.state.isOpen && this.state.showInfoIndex === index)&& <InfoWindow onCloseClick={()=>{ this.onToggleOpen(index, name), this.onShowTheatreInfo(name)} }>
@@ -46,7 +43,7 @@ class CreateMarker extends Component {
             onClick={()=>{ document.getElementById(name).scrollIntoView() } }
           >
             <div className='image-container-infobox'>
-              <img id='{theatre}' className='theatre-picture-infobox' src={theatre} />
+              <img alt='theatre' id='{theatre}' className='theatre-picture-infobox' src={theatre} />
             </div>
             <div className='theatre-info-infobox'>
               <p className="name-infobox">{marker[0][3]}</p>

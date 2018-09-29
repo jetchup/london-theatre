@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
-import { Fragment } from 'react'
-import headerImage from './img/gjon-mili-stroboscopic-09.jpg';
 import theatre from './img/london-coliseum-view-from-t.jpg'
-import Test from './TESTgooglemap.js'
-import FindAddress from './FindAddress.js'
+import GoogleMap from './GoogleMap.js'
 import './App.css';
 
 
@@ -18,15 +15,12 @@ class App extends Component {
     mapZoom: 8,
   }
 
+  // gets data from GoogleMap.js
   getVenueInfo(venues) {
     this.setState({venueArray: venues})
   }
 
-  setStateVenues() {
-    console.log(venueArrays)
-    this.setState({venueArray: venueArrays})
-  }
-
+  // creates the html nodes from venue api data
   displayVenues(){
     const listTheaters = this.state.venueArray.map((venue, index) =>{
       const address = venue[0]
@@ -41,7 +35,7 @@ class App extends Component {
       return (
         <div id={name} key={'venue'+index} className='theatre-container' >
           <div className='image-container'>
-            <img id='{theatre}' className='theatre-picture' src={theatre} />
+            <img alt='theatre' id='{theatre}' className='theatre-picture' src={theatre} />
           </div>
           <div className='theatre-info'>
             <p className="name">{name}</p>
@@ -63,9 +57,8 @@ class App extends Component {
   watchID() {
     const that = this
     navigator.geolocation.watchPosition(function(position) {
+      // Transfer data to function for calculating distance to London
       that.toLondon(position.coords.latitude, position.coords.longitude)
-      //that.setState({mapCenter: {lat: lat, lng: lng}})
-
     })
   }
 
@@ -95,10 +88,10 @@ class App extends Component {
         dist = Math.acos(dist)
         dist = dist * 180 / Math.PI
         dist = dist * 60 * 1.1515
-        if (unit == "K") {
+        if (unit === "K") {
             dist = dist * 1.609344
         }
-        if (unit == "N") {
+        if (unit === "N") {
             dist = dist * 0.8684
         }
         return dist
@@ -106,20 +99,15 @@ class App extends Component {
   }
 
   // -----------------------
-  // This is the address you got from the user´s imput
+  // This is the address you got from the user´s imput on the website's imput field
   // -----------------------
 
   getAddress = (e) => {
-
-      console.log(this.props)
     e.preventDefault()
 
     if (!addressField[0].value) {
-      console.log('first enter an address')
       addressField[0].value = 'first enter an address'
     } else {
-    console.log(addressField[0].value)
-
     this.newAddress(addressField[0].value)
     }
   }
@@ -133,7 +121,6 @@ class App extends Component {
 // -----------------------
 
   newAddress = (address) => {
-    const map= window.google.maps.Map
     let result= []
     const that = this
 
@@ -146,7 +133,6 @@ class App extends Component {
         } else {
           alert('Geocode was not successful for the following reason: ' + status);
         }
-        console.log(result[0][0])
         that.setState({
           mapCenter: {lat: result[0][0][0], lng: result[0][0][1]},
           mapZoom: 14
@@ -177,8 +163,8 @@ class App extends Component {
           </div>
         </header>
         <main>
-         <div id='map' style={{height: 'calc(100vh / 1.5)', width:'95%'}}>
-         <Test mapCenter={this.state.mapCenter} mapZoom={this.state.mapZoom} getVenueInfo={this.getVenueInfo.bind(this)} newDecodedAddress={this.state.newDecodedAddress}/>
+         <div id='map' style={{ width:'95%'}}>
+         <GoogleMap mapCenter={this.state.mapCenter} mapZoom={this.state.mapZoom} getVenueInfo={this.getVenueInfo.bind(this)} newDecodedAddress={this.state.newDecodedAddress}/>
          </div>
           <div className='theatres'>
             {this.displayVenues()}
