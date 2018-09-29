@@ -45,6 +45,9 @@ class Map extends Component {
   venueIterator(responseInfo) {
     console.log('... retrieving venues')
     if (responseInfo) {
+
+      document.getElementById("api-handling").style.display = "none";
+      document.getElementById("api-handling").setAttribute('aria-hidden', 'true');
       const venueInfo = Object.values(responseInfo).map(value => value.map(venue => venue))
       const venueValues = []
 
@@ -110,10 +113,14 @@ class Map extends Component {
     )
   }
 
-
+  displayWaiting() {
+    // We show the modal stating we are loading venues
+    return (document.getElementById("api-handling").style.display = "block",
+    document.getElementById("api-handling").setAttribute('aria-hidden', 'false'))
+  }
   // implement markers from venue addresses
   geocodeAddress = (geocoder) => {
-    this.state.venues.length === 0? (console.log('no venues found, waiting...'), setTimeout(this.geocodeAddress, 1000)):
+    this.state.venues.length === 0? (this.displayWaiting(), setTimeout(this.geocodeAddress, 1000)):
     this.state.venues.slice(10, 20).map((venue) =>  // I HAD TO DO THIS TO AVOID GOOGLE API ERROR FOR TOO MANY REQUESTS
 
     {

@@ -33,7 +33,7 @@ class App extends Component {
       }
 
       return (
-        <div id={name} key={'venue'+index} className='theatre-container' >
+        <div id={name} key={'venue'+index} className='theatre-container' aria-hidden="true">
           <div className='image-container'>
             <img alt='theatre' id='{theatre}' className='theatre-picture' src={theatre} />
           </div>
@@ -51,52 +51,52 @@ class App extends Component {
     return listTheaters
   }
 
-  // -----------------------
-  // Address via browser´s geolocation
-  // -----------------------
-  watchID() {
-    const that = this
-    navigator.geolocation.watchPosition(function(position) {
-      // Transfer data to function for calculating distance to London
-      that.toLondon(position.coords.latitude, position.coords.longitude)
-    })
-  }
-
-  // Calculate distance to london, from https://stackoverflow.com/questions/30533351/filter-list-of-cities-with-latitude-and-longitude-on-given-distance-from-another
-  toLondon(lat, lng) {
-    const that = this
-
-    var cities = [
-    ['London', 51.5074, 0.1278],
-    ['Your Location', lat, lng]
-    ];
-
-    var dist = calculateDistance(cities[0][1], cities[0][2], cities[1][1], cities[1][2], 'K');
-    that.setState({mapCenter: {lat: lat, lng: lng}})
-    if (dist > 20) {
-      document.getElementById("modal").style.display = "block";
-    }
-
-    function calculateDistance(lat1, lon1, lat2, lon2, unit) {
-        var radlat1 = Math.PI * lat1 / 180
-        var radlat2 = Math.PI * lat2 / 180
-        var radlon1 = Math.PI * lon1 / 180
-        var radlon2 = Math.PI * lon2 / 180
-        var theta = lon1 - lon2
-        var radtheta = Math.PI * theta / 180
-        var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
-        dist = Math.acos(dist)
-        dist = dist * 180 / Math.PI
-        dist = dist * 60 * 1.1515
-        if (unit === "K") {
-            dist = dist * 1.609344
-        }
-        if (unit === "N") {
-            dist = dist * 0.8684
-        }
-        return dist
-    }
-  }
+  // // -----------------------
+  // // Address via browser´s geolocation TODO it breaks Firefox, let's keep it secret for now.
+  // // -----------------------
+  // watchID() {
+  //   const that = this
+  //   navigator.geolocation.watchPosition(function(position) {
+  //     // Transfer data to function for calculating distance to London
+  //     that.toLondon(position.coords.latitude, position.coords.longitude)
+  //   })
+  // }
+  //
+  // // Calculate distance to london, from https://stackoverflow.com/questions/30533351/filter-list-of-cities-with-latitude-and-longitude-on-given-distance-from-another
+  // toLondon(lat, lng) {
+  //   const that = this
+  //
+  //   var cities = [
+  //   ['London', 51.5074, 0.1278],
+  //   ['Your Location', lat, lng]
+  //   ];
+  //
+  //   var dist = calculateDistance(cities[0][1], cities[0][2], cities[1][1], cities[1][2], 'K');
+  //   that.setState({mapCenter: {lat: lat, lng: lng}})
+  //   if (dist > 20) {
+  //     document.getElementById("modal").style.display = "block";
+  //   }
+  //
+  //   function calculateDistance(lat1, lon1, lat2, lon2, unit) {
+  //       var radlat1 = Math.PI * lat1 / 180
+  //       var radlat2 = Math.PI * lat2 / 180
+  //       var radlon1 = Math.PI * lon1 / 180
+  //       var radlon2 = Math.PI * lon2 / 180
+  //       var theta = lon1 - lon2
+  //       var radtheta = Math.PI * theta / 180
+  //       var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+  //       dist = Math.acos(dist)
+  //       dist = dist * 180 / Math.PI
+  //       dist = dist * 60 * 1.1515
+  //       if (unit === "K") {
+  //           dist = dist * 1.609344
+  //       }
+  //       if (unit === "N") {
+  //           dist = dist * 0.8684
+  //       }
+  //       return dist
+  //   }
+  // }
 
   // -----------------------
   // This is the address you got from the user´s imput on the website's imput field
@@ -148,7 +148,7 @@ class App extends Component {
   }
 
   render() {
-    this.watchID()
+    //this.watchID()
 
     return (
       <div className="App">
@@ -169,12 +169,19 @@ class App extends Component {
           <div className='theatres'>
             {this.displayVenues()}
           </div>
-          <div id='modal'>
-          <div id='modal-content'>
-            <div className='attention'>
-              <p>Would you like to go to London?</p>
-              <button onClick={this.goLondon.bind(this)}>yes, go to London</button>
+          <div id='modal' aria-hidden="true">
+            <div id='modal-content'>
+              <div className='attention'>
+                <p>Would you like to go to London?</p>
+                <button onClick={this.goLondon.bind(this)}>yes, go to London</button>
+              </div>
             </div>
+          </div>
+          <div id='api-handling' aria-hidden="true">
+            <div id='modal-content'>
+              <div className='attention'>
+                <p>Loading venues...</p>
+              </div>
             </div>
           </div>
         </main>

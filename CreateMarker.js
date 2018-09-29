@@ -19,8 +19,12 @@ class CreateMarker extends Component {
     })
   }
 
+  // Display the theatres corresponding to the markers clicked
   onShowTheatreInfo(name) {
-    this.state.isOpen? document.getElementById(name).style.display="block" : document.getElementById(name).style="none"
+    let currentElement = document.getElementById(name)
+    this.state.isOpen? (
+      (currentElement.style.display="block", currentElement.setAttribute('aria-hidden', 'false'))
+    ) : (currentElement.style="none", currentElement.setAttribute('aria-hidden', 'true'))
   }
 
     // ----this helped a lot: https://github.com/tomchentw/react-google-maps/issues/753

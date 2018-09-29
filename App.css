@@ -220,8 +220,8 @@ main {
   border-radius: 3% 3% 0;
 }
 
-/* --------------------------  Modal only appears if you are too far away from London TODO style it!!------------------------------ */
-#modal {
+/* ---------  Modal only appears if you are too far away from London ------------------------------ */
+#modal, #api-handling {
   position: absolute;
   display: none;
   background: rgba(0, 0, 0, 0.8);
@@ -233,7 +233,7 @@ main {
 }
 #modal-content {
   width: 100%;
-  margin-top: 60px;
+  margin-top: 50%;
 }
 .attention{
   width: 100%;
@@ -293,5 +293,12 @@ main {
     margin: 0;
     background: rgba(0,0,0,0.8);
     height: calc(66.6667vh);
+  }
+  #modal, #api-handling {
+    position: absolute;
+    display: none;
+    background: rgba(0, 0, 0, 0.8);
+    width: 90%;
+    height: calc((100vh /5) * 4);
   }
 }
