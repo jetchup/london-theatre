@@ -151,6 +151,7 @@ class Map extends Component {
   }
 
 
+
   render() {
     // variables from react-google-maps
     const MapWithAMarkerClusterer = compose(
@@ -166,7 +167,7 @@ class Map extends Component {
           enableRetinaIcons
           gridSize={60}
         >
-        <CreateMarker state={this.state} />
+        <CreateMarker state={this.state} targetId={this.props.targetId} />
 
         </MarkerClusterer>
       </GoogleMap>
