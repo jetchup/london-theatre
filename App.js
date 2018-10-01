@@ -36,8 +36,7 @@ class App extends Component {
         const name = venue[1]
         if (inputValue){
           const match = new RegExp(escapeRegExp(inputValue), 'i')
-          match.test(name)?
-            (console.log(inputValue, name),
+          match.test(name)?(
             document.getElementById(name).style = "",
             document.getElementById(name).setAttribute('aria-hidden', 'false')
            ):(
@@ -67,15 +66,21 @@ class App extends Component {
           <div className='theatre-container'
             id={name}
             aria-hidden="false"
+            tabIndex="0"
             key={'venue'+index}
             onClick={
               (e) => {
-                this.clickedTheatre(e),
-                e.target.parentNode.parentNode.classList.toggle("to-side")
+                this.clickedTheatre(e)
               }
-            }>
+            }
+            onKeyPress={
+              (e) => {
+                this.keyedTheatre(e)
+              }
+            }
+            >
             <div className='image-container'>
-              <img alt={'photo of ' + name} id='{theatre}' className='theatre-picture' src={theatre} />
+              <img alt={'photo of ' + name} className='theatre-picture' src={theatre} />
             </div>
             <div className='theatre-info'>
               <p className="name">{name}</p>
@@ -93,15 +98,29 @@ class App extends Component {
     this.setState({GoogleMapFunction: e})
   }
 
+  keyedTheatre = (e) => {
+    if (e.key == 'Enter') {
+      e.target.classList.toggle("to-side")
+      this.setState({
+        targetId: e.target.parentNode.parentNode.id,
+      }, () => {
+        // refer to the function on googlemap.js,
+        console.log(this.state.targetId),
+        this.state.GoogleMapFunction.passPosition()
+      })
+    }
+  }
+
   clickedTheatre = (e) => {
+    e.target.parentNode.parentNode.classList.toggle("to-side")
     this.setState({
       targetId: e.target.parentNode.parentNode.id,
     }, () => {
       // refer to the function on googlemap.js,
       console.log(this.state.targetId),
       this.state.GoogleMapFunction.passPosition()
-    }
-  )}
+    })
+  }
 
 
   render() {
@@ -118,10 +137,10 @@ class App extends Component {
           </div>
         </header>
         <main>
-         <div id='map' style={{ width:'95%'}}>
+         <div id='map' >
          <GoogleMap ref={this.referenceFunction} targetId={this.state.targetId} getVenueInfo={this.getVenueInfo.bind(this)} newDecodedAddress={this.state.newDecodedAddress}/>
          </div>
-          <div className='theatres'>
+          <div className='theatres' tabIndex="0">
             {this.displayVenues()}
           </div>
           <div id='api-handling' aria-hidden="true">

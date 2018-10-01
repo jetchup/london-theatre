@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Fragment } from 'react';
 import {withScriptjs, withGoogleMap, GoogleMap} from "react-google-maps";
+import ReactGoogleMapLoader from "react-google-maps-loader";
 import { MarkerClusterer } from "react-google-maps/lib/components/addons/MarkerClusterer";
 import CreateMarker from './CreateMarker.js'
 const { compose } = require("recompose");
@@ -212,6 +213,25 @@ class Map extends Component {
       document.getElementsByClassName('attention')[0].children[0].style.display = "block",
       document.getElementsByClassName('attention')[0].children[0].setAttribute('aria-hidden', 'false')
     )}
+
+    {/* Handle Google Maps error  */}
+    <ReactGoogleMapLoader
+    params={{
+        key: 'AIzaSyBXHssNaFm57yh0sOVvfmjp8VkfiPTW7yY', // Define your api key here
+    }}
+    render={(googleMaps, error) =>
+        googleMaps ? (
+            <div>
+                {/*Show a custom error if SDK Authentication Error. See N/B 2 below.*/}
+                {error ? error : ""}
+            </div>
+        )   :   (
+            <div>
+                {/*Check for network error so loading state ends if user lost connection.*/}
+                {error === "Google Maps Network Error" ? <p>{error}</p> : <p>isLoading...</p>}
+            </div>
+        )
+    }/>
     </Fragment>
   )
 

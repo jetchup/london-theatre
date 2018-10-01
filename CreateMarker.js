@@ -31,11 +31,9 @@ class CreateMarker extends Component {
           animation= {window.google.maps.Animation.DROP}
       >
         { (this.state.isOpen && this.state.showInfoIndex === index)&& <InfoWindow onCloseClick={()=>{ this.onToggleOpen(index, name)} }>
-       <div className='theatre-container-infobox'
-          onClick={()=>{ document.getElementById(name).scrollIntoView() } }
-        >
+       <div className='theatre-container-infobox'>
           <div className='image-container-infobox'>
-            <img alt='theatre' id='{theatre}' className='theatre-picture-infobox' src={theatre} />
+            <img alt='theatre' className='theatre-picture-infobox' src={theatre} />
           </div>
           <div className='theatre-info-infobox'>
             <p className="name-infobox">{marker[0][3]}</p>
