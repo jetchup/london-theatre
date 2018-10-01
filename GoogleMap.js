@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Fragment } from 'react';
 import {withScriptjs, withGoogleMap, GoogleMap} from "react-google-maps";
 import { MarkerClusterer } from "react-google-maps/lib/components/addons/MarkerClusterer";
 import CreateMarker from './CreateMarker.js'
@@ -15,6 +16,8 @@ class Map extends Component {
     venues: [],
     markerPosition: [],
     map: [],
+    mapCenter: {lat: 51.5074, lng: 0.1278},
+    mapZoom: 8
   }
 
   componentDidMount() {
@@ -30,11 +33,19 @@ class Map extends Component {
       if (response.status === 200) {
         return response.json();
       } else {
-        throw new Error('Something went wrong on api server!')
+        throw new Error('Something went wrong on api server!'),
+        document.getElementsByClassName('attention')[0].children[0].innerText = 'Error connecting to London Theatres server',
+        document.getElementsByClassName('attention')[0].children[0].style.display = "block",
+        document.getElementsByClassName('attention')[0].children[0].setAttribute('aria-hidden', 'false')
       }
     })
     .then(responseInfo => this.venueIterator(responseInfo))
-    .catch(error => console.log(error, ' error happened on the second instance of the request'))
+    .catch(error => {
+      console.log(error, ' error happened on the second instance of the request'),
+      document.getElementsByClassName('attention')[0].children[0].innerText = 'Error connecting to London Theatres',
+      document.getElementsByClassName('attention')[0].children[0].style.display = "block",
+      document.getElementsByClassName('attention')[0].children[0].setAttribute('aria-hidden', 'false')
+    })
 
 
     this.waitForGoogle()
@@ -150,6 +161,21 @@ class Map extends Component {
     }
   }
 
+  passPosition() {(
+    this.state.markerPosition.map((marker, index) =>{
+      let name = marker[0][3]
+      let positionMarker = { lat: marker[0][0], lng: marker[0][1] }
+      if (this.props.targetId) {
+
+        // checking if this is the marker of the clicked theatre
+        if (name === this.props.targetId) {
+          this.setState({
+            mapZoom: 18,
+            mapCenter: positionMarker
+          })
+        }}
+      })
+  )}
 
 
   render() {
@@ -159,27 +185,34 @@ class Map extends Component {
     withGoogleMap
   )(props =>
       <GoogleMap
-        defaultZoom={this.props.mapZoom}
-        defaultCenter={this.props.mapCenter}
+        defaultZoom={this.state.mapZoom}
+        defaultCenter={this.state.mapCenter}
       >
         <MarkerClusterer
           averageCenter
           enableRetinaIcons
           gridSize={60}
         >
-        <CreateMarker state={this.state} targetId={this.props.targetId} />
+        <CreateMarker state={this.state} props={this.props}/>
 
         </MarkerClusterer>
       </GoogleMap>
   );
 
   return (
-    <MapWithAMarkerClusterer
-      googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyBXHssNaFm57yh0sOVvfmjp8VkfiPTW7yY&v=3.exp&libraries=geometry,drawing,places"
-      loadingElement={<div style={{ height: 'calc(100vh / 2)' }} />}
-      containerElement={<div style={{ height: '100%' }} />}
-      mapElement={<div style={{ height: `100%` }} />}
-    />
+    <Fragment>
+    {(MapWithAMarkerClusterer)?
+      (<MapWithAMarkerClusterer
+        googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyBXHssNaFm57yh0sOVvfmjp8VkfiPTW7yY&v=3.exp&libraries=geometry,drawing,places"
+        loadingElement={<div style={{ height: 'calc(100vh / 2)' }} />}
+        containerElement={<div style={{ height: '100%' }} />}
+        mapElement={<div style={{ height: `100%` }} />}
+      />):(
+      document.getElementsByClassName('attention')[0].children[0].innerText = 'Error loading Google Maps',
+      document.getElementsByClassName('attention')[0].children[0].style.display = "block",
+      document.getElementsByClassName('attention')[0].children[0].setAttribute('aria-hidden', 'false')
+    )}
+    </Fragment>
   )
 
   }
