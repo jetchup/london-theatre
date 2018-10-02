@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Fragment } from 'react';
 import { Marker, InfoWindow} from "react-google-maps";
 import theatre from './img/london-coliseum-view-from-t.jpg'
-import customIcon from './img/custom-marker.svg'
 
 class CreateMarker extends Component {
 
@@ -21,7 +20,6 @@ class CreateMarker extends Component {
   constructMarker() {
     return (this.props.state.markerPosition.map((marker, index) =>{
       let name = marker[0][3]
-      let positionMarker = { lat: marker[0][0], lng: marker[0][1] }
 
       return (
       <Marker

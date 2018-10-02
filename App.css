@@ -25,7 +25,8 @@ body {
   flex-direction: column;
   justify-content: flex-start;
   height: 100vh;
-  min-height: 1500px;
+  min-height: 1700px;
+  margin-bottom: -50px;
 }
 
 .App-header div {
@@ -85,6 +86,7 @@ main {
   flex-direction: column;
   -ms-align-items: center;
   align-items: center;
+  flex: 1 0 auto;
 }
 
 #map {
@@ -252,6 +254,17 @@ main {
   margin-top: 20px;
   background-color: white;
 }
+footer {
+  color: #9d9d9d;
+  font-size: 0.7em;
+  flex-shrink: 0;
+  align-self: center;
+  margin-bottom: 0;
+  height: 50px;
+  line-height: 46px;
+  width: 100%;
+  max-width: 1550px;
+}
 
 @media (min-width: 701px) {
   .App {
@@ -303,6 +316,10 @@ main {
     background: rgba(0, 0, 0, 0.8);
     width: 50%;
     height: 100vh;
+  }
+  footer {
+    width: 100%;
+    background-color: rgba(0,0,0,0.8);
   }
 }
 @media (min-width: 1101px) {

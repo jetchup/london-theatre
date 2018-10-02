@@ -34,10 +34,10 @@ class Map extends Component {
       if (response.status === 200) {
         return response.json();
       } else {
-        throw new Error('Something went wrong on api server!'),
-        document.getElementsByClassName('attention')[0].children[0].innerText = 'Error connecting to London Theatres server',
-        document.getElementsByClassName('attention')[0].children[0].style.display = "block",
+        document.getElementsByClassName('attention')[0].children[0].innerText = 'Error connecting to London Theatres server'
+        document.getElementsByClassName('attention')[0].children[0].style.display = "block"
         document.getElementsByClassName('attention')[0].children[0].setAttribute('aria-hidden', 'false')
+        throw new Error('Something went wrong on api server!')
       }
     })
     .then(responseInfo => this.venueIterator(responseInfo))

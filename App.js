@@ -1,15 +1,9 @@
 import React, { Component } from 'react';
-import { Fragment } from 'react';
 import escapeRegExp from 'escape-string-regexp'
 import theatre from './img/london-coliseum-view-from-t.jpg'
 import GoogleMap from './GoogleMap.js'
 import './App.css';
 
-
-let venueArrays= []
-let futureMapCenter = {}
-
-const addressField = document.getElementsByClassName('enter-address')
 
 class App extends Component {
   state = {
@@ -44,7 +38,7 @@ class App extends Component {
             document.getElementById(name).setAttribute('aria-hidden', 'true')
           )
         } else {
-          document.getElementById(name).style = "",
+          document.getElementById(name).style = ""
           document.getElementById(name).setAttribute('aria-hidden', 'false')
         }
     })
@@ -99,13 +93,12 @@ class App extends Component {
   }
 
   keyedTheatre = (e) => {
-    if (e.key == 'Enter') {
+    if (e.key === 'Enter') {
       e.target.classList.toggle("to-side")
       this.setState({
         targetId: e.target.parentNode.parentNode.id,
       }, () => {
         // refer to the function on googlemap.js,
-        console.log(this.state.targetId),
         this.state.GoogleMapFunction.passPosition()
       })
     }
@@ -117,7 +110,6 @@ class App extends Component {
       targetId: e.target.parentNode.parentNode.id,
     }, () => {
       // refer to the function on googlemap.js,
-      console.log(this.state.targetId),
       this.state.GoogleMapFunction.passPosition()
     })
   }
@@ -151,6 +143,7 @@ class App extends Component {
             </div>
           </div>
         </main>
+        <footer>Background image by Gjon Mili. Theatre data from londontheatredirect.com</footer>
       </div>
     );
   }
