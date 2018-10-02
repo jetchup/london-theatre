@@ -45,7 +45,6 @@ body {
   background-color: rgba(0,0,0,0.6);
   width: 100%;
   padding: 20px 0;
-  margin-bottom: 20px;
 }
 
 .App-title {
@@ -90,6 +89,7 @@ main {
 
 #map {
   height: calc(100vh / 1.5);
+  width: 95%;
 }
 
 #map div{
@@ -133,7 +133,7 @@ main {
 }
 
 .theatres {
-  width: 75%;
+  width: 95%;
   margin-top: 20px;
 }
 
@@ -161,19 +161,21 @@ main {
 }
 .image-container {
   margin:0;
-  margin-left: -80%;
-  height: 63px;
-  width: auto;
+  height: 65px;
+  width: 50px;
+  overflow: hidden;
+  border-radius: 10px 0 0 0;
 }
 .theatre-picture {
   margin:0;
-  height: 103%;
+  height: 100%;
 }
 .theatre-info {
     width: 100%;
     overflow: hidden;
     background-image: linear-gradient(#E82C0C, #FF0000);
-    margin: -63px 0 20px 0;
+    margin: -65px 0 20px 0;
+    border-radius: 10px 10px 0 0 ;
 }
 
 .theatre-info hr{
@@ -187,11 +189,11 @@ main {
 }
 .theatre-info .address{
   margin:0;
-  margin-top: -9px;
+  margin: -9px 0 0 50px;
   font-size: 0.8em;
   color: black;
   background-color: #e80000;
-  max-height: 16px;
+  height: 16px;
   overflow: hidden;
 }
 
@@ -199,8 +201,10 @@ main {
   font-family: 'Teko', sans-serif;
   font-size: 2em;
   margin:0;
+  margin: 0 0 0 50px;
   color: black;
   background-color: #FF0000;
+  border-radius: 10px 10px 0 0;
 }
 /* theatre list too long with this info displayed */
 .theatre-description {
@@ -223,7 +227,7 @@ main {
 }
 
 
-/* ---------  Modal only appears if you are too far away from London ------------------------------ */
+/* ---------  Modal only appears when loading and if errors ocurr ------------------------------ */
 #modal, #api-handling {
   position: absolute;
   display: none;
@@ -251,88 +255,82 @@ main {
 
 @media (min-width: 701px) {
   .App {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    background-size: cover;
-    width: 100%;
-    min-height: 100%;
-  }
-  .App-header {
-    width: 100%;
-    margin-top: 2px;
-    flex-wrap: wrap;
-  }
-  .App-header div {
-    width: 100%;
     margin: 0;
     padding: 0;
-    background-color: transparent;
+    min-height: 1200px;
+    height: 100vh;
+    max-width: 100%;
+    background-size: contain;
   }
-  .App-header .intro{
-    width: 70%;
-    padding: 20px 0;
-    height: calc(100vh /8);
+  .App-header {
+    max-width: 95%;
   }
   main {
+    padding-top: 10px;
     width: 100%;
-    position: absolute;
-    margin-top: 135px;
-    margin-left: calc(60%);
+    flex-direction: row;
+    align-self: center;
+    background-color: rgba(0,0,0,0.8);
   }
   #map {
-    width: 40%;
-    margin-left: -60%;
-    height: calc((100vh /5) * 4);
-    margin-bottom: 135px;
+    margin: 0;
+    margin-left: 1%;
+    width: 50%;
+    height: 100vh;
+    flex: 1 1 auto;
+    align-self: flex-start;
+    align-content: stretch;
   }
   .theatres {
     margin: 0;
-    max-height: calc((68vh * 4/5) + 44px);
-    overflow: scroll;
-    position: absolute;
-    margin-top: calc((100vh /5));
-    margin-left: calc(-28%);
-    transform: translate(-50vw, 0);
-    width: 60%;
+    margin-right: 1%;
+    width: 50%;
   }
-  .theatre-container {
-    margin: 0;
-    background: rgba(0,0,0,0.8);
+  .image-container {
+    margin:0;
+    height: 65px;
+    width: 80px;
     overflow: hidden;
+    border-radius: 0 0 0 0;
+  }
+  .theatre-picture {
+    margin:0;
+    height: 100%;
   }
   #modal, #api-handling {
     position: absolute;
     display: none;
     background: rgba(0, 0, 0, 0.8);
-    width: 90%;
-    height: calc((100vh /5) * 4);
+    width: 50%;
+    height: 100vh;
   }
 }
-@media (min-width: 901px) {
-  App {
+@media (min-width: 1101px) {
+  .App {
+
+    align-items: center;
+    background-size: cover;
+  }
+  .App-header div {
     width: 100vw;
+    max-width: 1550px;
   }
-  .intro, .theatres {
-    max-width: 540px;
-  }
-  main {
-    margin:0;
-    margin-top: 140px;
-    align-self: flex-start;
-    margin-left: 540px;
-  }
-
-  .theatres {
-    margin: 0;
-    margin-top: 140px;
-    align-self: flex-start;
-
+  main{
+    max-width: 1550px;
   }
   #map {
-    flex: 1 1 auto;
-    margin: 0;
-    width: calc(100% - 540px);
-    align-self: flex-start;
+    width: 70%;
+  }
+  .theatres{
+    width: 30%;
+  }
+  #modal, #api-handling {
+    position: absolute;
+    display: none;
+    background: rgba(0, 0, 0, 0.8);
+    width: 70%;
+    max-width: 1063px;
+    margin-left: 1%;
+    height: 100vh;
   }
 }
