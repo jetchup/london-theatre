@@ -18,7 +18,8 @@ class Map extends Component {
     markerPosition: [],
     map: [],
     mapCenter: {lat: 51.5074, lng: 0.1278},
-    mapZoom: 8
+    mapZoom: 8,
+    filteredPosition: []
   }
 
   componentDidMount() {
@@ -140,12 +141,13 @@ class Map extends Component {
       const name = venue[1]
       const that = this
 
-      this.getAddress(geocoder, address, name, that)
+      this.getAddress(geocoder, address, name)
     })
   }
 
   getAddress(geocoder, address, name, that) {
     if (address) {
+      const that = this
       // ------------------
       //here is the handy code for geocode markers from google developers
       // ------------------
@@ -153,7 +155,12 @@ class Map extends Component {
 
       geocoder.geocode( { 'address': address, 'region': 'uk'}, function(results, status) {
         if (status === 'OK') {
-          result.push([[results[0].geometry.location.lat(), results[0].geometry.location.lng(), address, name]])
+          let newMarker = [[results[0].geometry.location.lat(), results[0].geometry.location.lng(), address, name]]
+
+          result.push(newMarker)
+
+
+
         } else {
           console.log('Geocode was not successful for the following reason: ' + status);
         }
@@ -162,10 +169,12 @@ class Map extends Component {
     }
   }
 
-  passPosition() {(
+  passPosition(match) {
     this.state.markerPosition.map((marker, index) =>{
       let name = marker[0][3]
       let positionMarker = { lat: marker[0][0], lng: marker[0][1] }
+
+      // if we clicked on one theatre
       if (this.props.targetId) {
 
         // checking if this is the marker of the clicked theatre
@@ -176,7 +185,20 @@ class Map extends Component {
           })
         }}
       })
-  )}
+  }
+
+  filterMarkers(match) {
+    const allMarkers = this.state.markerPosition
+    // let's filter the markers
+    if (match) {
+      let filteredMarkers = allMarkers.filter(marker =>
+        match.test(marker[0][3])
+      )
+      this.setState({filteredPosition: filteredMarkers})
+    }  else {
+      this.setState({filteredPosition: []})
+    }
+  }
 
 
   render() {

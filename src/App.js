@@ -30,16 +30,27 @@ class App extends Component {
         const name = venue[1]
         if (inputValue){
           const match = new RegExp(escapeRegExp(inputValue), 'i')
+
+
+          // Change marker's visibility: refer to the function on googlemap.js,
+          this.state.GoogleMapFunction.filterMarkers(match)
+
+
           match.test(name)?(
+            // Change the theatre list's visibility
             document.getElementById(name).style = "",
             document.getElementById(name).setAttribute('aria-hidden', 'false')
            ):(
+            // Change the theatre list's visibility
             document.getElementById(name).style.display = "none",
             document.getElementById(name).setAttribute('aria-hidden', 'true')
           )
         } else {
+          // Change the theatre list's visibility
           document.getElementById(name).style = ""
           document.getElementById(name).setAttribute('aria-hidden', 'false')
+          // Change marker's visibility: refer to the function on googlemap.js,
+          this.state.GoogleMapFunction.filterMarkers()
         }
     })
   }
@@ -129,7 +140,7 @@ class App extends Component {
           </div>
         </header>
         <main>
-         <div id='map' >
+         <div id='map' aria-role='application'>
          <GoogleMap ref={this.referenceFunction} targetId={this.state.targetId} getVenueInfo={this.getVenueInfo.bind(this)} newDecodedAddress={this.state.newDecodedAddress}/>
          </div>
           <div className='theatres' tabIndex="0">
