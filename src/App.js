@@ -62,6 +62,7 @@ class App extends Component {
     const listTheaters = this.state.venueArray.map((venue, index) =>{
       const address = venue[0]
       const name = venue[1]
+      const info = venue[2]
       let image = venue[3]
 
       if (image === undefined) {
@@ -75,12 +76,14 @@ class App extends Component {
             key={'venue'+index}
             onClick={
               (e) => {
-                this.clickedTheatre(e)
+                this.clickedTheatre(e),
+                this.showTheatreInfo(e)
               }
             }
             onKeyPress={
               (e) => {
-                this.keyedTheatre(e)
+                this.keyedTheatre(e),
+                this.showTheatreInfo(e)
               }
             }
             >
@@ -91,6 +94,9 @@ class App extends Component {
               <p className="name">{name}</p>
               <hr />
               <p className="address">{address}</p>
+            </div>
+            <div className='theatre-description'>
+              <p className=".info" dangerouslySetInnerHTML={{__html: info}}/>
             </div>
           </div>
         )
@@ -115,10 +121,20 @@ class App extends Component {
     }
   }
 
+  showTheatreInfo(e) {
+    const wholeDiv = e.target.parentNode.parentNode
+    //toggle display info area
+    wholeDiv.className ==='theatre-container to-side'?
+        wholeDiv.children[2].style.display = "block"
+    :
+        wholeDiv.children[2].style.display = "none"
+  }
+
   clickedTheatre = (e) => {
-    e.target.parentNode.parentNode.classList.toggle("to-side")
+    const wholeDiv = e.target.parentNode.parentNode
+    wholeDiv.classList.toggle("to-side")
     this.setState({
-      targetId: e.target.parentNode.parentNode.id,
+      targetId: wholeDiv.id,
     }, () => {
       // refer to the function on googlemap.js,
       this.state.GoogleMapFunction.passPosition()
